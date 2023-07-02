@@ -85,7 +85,11 @@ $(document).ready(function(){
 		}else if(operation === 'list'){
 			//move to list
 			formObj.attr("action", "/board/list").attr("method", "get");
+			let pageNumTag = $("input[name='pageNum']").clone();
+			let amountTag = $("input[name='amount']").clone();
 			formObj.empty();
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 /* 			self.location="/board/list";
 			return; */
 		}else if(operation ==='modify'){
