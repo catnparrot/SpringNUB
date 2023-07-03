@@ -66,7 +66,7 @@ public class BoardMapperTests {
 	@Test
 	public void testUpdate() {
 		BoardVO board = new BoardVO();
-		board.setBno(5L);
+		board.setBno(27L);
 		board.setTitle("수정된 제목");
 		board.setContent("수정된 내용");
 		board.setWriter("user01");
@@ -82,5 +82,16 @@ public class BoardMapperTests {
 		cri.setAmount(10);
 		List<BoardVO> list = mapper.getListWithPaging(cri);
 		list.forEach(board -> log.info(board.getBno()));
+	}
+	
+	@Test
+	public void testSearch() {
+		Criteria cri = new Criteria();
+		cri.setKeyword("새로");
+		cri.setType("TC");
+		
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		
+		list.forEach(board -> log.info(board));
 	}
 }

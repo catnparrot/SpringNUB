@@ -91,4 +91,8 @@ public class BoardControllerTests {
 				.andReturn().getModelAndView().getModelMap()
 				);
 	}
+	
+//	public void testSearch() throws Exception {
+//		log.info(mockMvc.perform(MockMvcRequestBuilders.post("/board/")));
+//	}
 }
