@@ -61,8 +61,26 @@
 </div>
 <!-- /.row -->
 
+<script src="/resources/js/reply.js"></script>
+
 <script>
+
+
+console.log("=========");
+console.log("JS TEST");
+
+let bnoValue='<c:out value="${board.bno}" />';
+
+replyService.add(
+		{reply:"JS TEST", replyer:"tester", bno:bnoValue}
+		,
+		function(result){
+			alert("RESULT: " + result);
+		}
+);
+
 $(document).ready(function() {
+
 	let operForm = $("#operForm");
 	$("button[data-oper='modify']").on("click", function(e){
 		operForm.attr("action", "/board/modify").submit();
