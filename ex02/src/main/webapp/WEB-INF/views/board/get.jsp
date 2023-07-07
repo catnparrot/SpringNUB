@@ -71,22 +71,21 @@
 				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
 			</div>
 			<div class="panel-body">
-			
 				<ul class="chat">
-					<!-- start reply -->
-					<!-- example -->
-					<!-- 
-					<li class="left clearfix" data-rno='12'>
-						<div>
-							<div class="header">
-								<strong class="primary-font">user00</strong>
-								<small class="pull-right text-muted">1</small>
-							</div>
-							<p>Good job!</p>
-						</div>
-					</li>
-					 -->
-					<!-- end reply -->
+									<!-- start reply -->
+									<!-- example -->
+									<!-- 
+									<li class="left clearfix" data-rno='12'>
+										<div>
+											<div class="header">
+												<strong class="primary-font">user00</strong>
+												<small class="pull-right text-muted">1</small>
+											</div>
+											<p>Good job!</p>
+										</div>
+									</li>
+									 -->
+									<!-- end reply -->
 				</ul>
 				<!-- end ul -->
 				
@@ -119,7 +118,7 @@
 				</div>
 				<div class="form-group">
 					<label>Replyer</label>
-					<input class="form-control" name='replyer' value='replyer'>
+					<input class="form-control" name='replyer' value='replyer' readonly>
 				</div>
 				<div class="form-group">
 					<label>Reply Date</label>
@@ -155,7 +154,7 @@
 
 <script>
 /* 
-console.log("=========");
+console.log("===================");
 console.log("JS TEST - getReply");
 
 replyService.get(15, function(data){
@@ -167,7 +166,7 @@ replyService.get(15, function(data){
 
 <script>
 /* 
-console.log("=========");
+console.log("===================");
 console.log("JS TEST - UpdateReply");
 
 let bnoValue='<c:out value="${board.bno}" />';
@@ -184,7 +183,7 @@ replyService.update({
 
 <script>
 /*  
-console.log("=========");
+console.log("===================");
 console.log("JS TEST - RemoveReply");
 
 replyService.remove(11, function(count){
@@ -202,7 +201,7 @@ replyService.remove(11, function(count){
 
 <script>
 /* 
-console.log("=========");
+console.log("===================");
 console.log("JS TEST - ListReply");
 
 let bnoValue='<c:out value="${board.bno}" />';
@@ -218,7 +217,7 @@ replyService.getList({bno:bnoValue, page:1}, function(list){
 
 <script>
 /* 
-console.log("=========");
+console.log("===================");
 console.log("JS TEST - addReply");
 
 let bnoValue='<c:out value="${board.bno}" />';
@@ -276,6 +275,8 @@ $(document).ready(function() {
 			}
 			
 			replyUL.html(str);
+			
+			showReplyPage(replyCnt);
 		}); //end replyService
 	}	//end function showList	
 	
@@ -341,7 +342,7 @@ $(document).ready(function() {
 		replyService.update(reply, function(result){
 			alert(result);
 			modal.modal("hide");
-			showList(1);
+			showList(pageNum);
 		});
 	});
 	
@@ -350,7 +351,7 @@ $(document).ready(function() {
 		replyService.remove(rno, function(result){
 			alert(result);
 			modal.modal("hide");
-			showList(1);
+			showList(pageNum);
 		});
 	});
 	
@@ -375,11 +376,37 @@ $(document).ready(function() {
 		let str = "<ul class='pagination pull-right'>";
 		
 		if(prev){
-			str += "";
+			str += "<li class='page-item'><a class='page-link' href='"+(startNum-1)+"'>Previous</a></li>";
+		}
+		
+		for(let i = startNum; i<=endNum; i++){
+			let active = pageNum == i ? "active" : "";
+			
+			str += "<li class='page-item "+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		}
+		
+		if(next){
+			str += "<li class='page-item'><a class='page-link' href='"+(endNum+1)+"'>Next</a></li>";
 		}
 		
 		str +="</ul>"
+		
+		console.log(str);
+		
+		replyPageFooter.html(str);
 	};
+	
+	replyPageFooter.on("click", "li a", function(e){
+		e.preventDefault();
+		console.log("page click");
+		let targetPageNum = $(this).attr("href");
+		console.log("targetPageNum: " + targetPageNum);
+		pageNum = targetPageNum;
+		showList(pageNum);
+	});
+	
+	
+	
 });
 </script>
 
