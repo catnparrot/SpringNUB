@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+	<bean id="loginSuccess" class="org.zerock.security.LoginSuccessHandler"></bean>
+	<!-- <bean id="noOpPasswordEncoder" class="org.zerock.security.NoOpPasswordEncoder"></bean> -->
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+	<!-- <bean id="customUserDetailService" class="org.zerock.security.CustomUserDetailsService"></bean> -->
+	
+
+	<security:http>
+		<!-- <security:intercept-url pattern="/*" access="permitAll"/> -->
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_USER')" />
+		<security:intercept-url pattern="/sample/manager" access="hasRole('ROLE_MANAGER')" />
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+		
+		<security:form-login login-page="/login" authentication-success-handler-ref="loginSuccess" />
+		<security:logout logout-url="/logout.do" invalidate-session="true" />
+		
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		<security:access-denied-handler ref="customAccessDenied"/>
+	</security:http>
+
+
+	<security:authentication-manager>
+		<!-- 
+		<security:authentication-provider  user-service-ref="customUserDetailService" >	
+		</security:authentication-provider>
+		 -->
+		<security:authentication-provider >
+			<!-- <security:jdbc-user-service data-source-ref="dataSource"
+			users-by-username-query="select userid, userpw, enabled from users where userid=?"
+			authorities-by-username-query="select userid, auth2, auth1, auth3 from authorities2 where userid=?" /> -->
+			<security:jdbc-user-service data-source-ref="dataSource"
+			users-by-username-query="select userid, userpw, enabled from users where userid=?"
+			authorities-by-username-query="select userid, auth2, auth1, auth3 from authorities where userid=?" />
+			
+			<security:password-encoder ref="bcryptPasswordEncoder" />
+			
+			<!-- <security:password-encoder ref="noOpPasswordEncoder" /> -->
+			
+			<!-- 
+			<security:user-service>
+				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+				<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+			</security:user-service>
+			 -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

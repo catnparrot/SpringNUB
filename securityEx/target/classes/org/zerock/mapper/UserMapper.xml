@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.UserMapper">
+
+<resultMap type="org.zerock.domain.User" id="userMap">
+	<id property="userid" column="userid" />
+	<id property="userpw" column="userpw" />
+	<id property="username" column="username" />
+	<id property="regdate" column="regdate" />
+	<id property="updatedate" column="updatedate" />
+	<collection property="authList" resultMap="authMap"></collection>
+</resultMap>
+
+<resultMap type="org.zerock.domain.Auth" id="authMap">
+	<result property="userid" column="userid" />
+	<result property="auth" column="auth" />
+</resultMap>
+
+<select id="selectToRead" resultMap="userMap">
+	SELECT
+	users.userid, userpw, username, enabled, regdate, updatedate, auth
+	FROM
+	users LEFT OUTER JOIN authorities a ON users.userid=a.userid
+	WHERE users.userid = #{userid}
+</select>
+
+</mapper>
